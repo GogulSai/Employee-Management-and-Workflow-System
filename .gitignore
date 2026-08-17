@@ -1,0 +1,23 @@
+# IntelliJ
+.idea/
+
+# Build folders
+target/
+out/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Java
+*.class
+
+# Maven Wrapper Logs
+.mvn/wrapper/maven-wrapper.jar
+
+# VS Code
+.vscode/
