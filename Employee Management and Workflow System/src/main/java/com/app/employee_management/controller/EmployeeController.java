@@ -53,8 +53,6 @@ public class EmployeeController {
 
         EmployeeStatusResponse<EmployeeResponseDTO> statusResponse = new EmployeeStatusResponse<EmployeeResponseDTO>(HttpStatus.CREATED.toString(), "SUCCESS"
                 , null, "Employees Created", LocalDateTime.now().format(DefaultValue.FORMATTER), response);
-
-        //return ResponseEntity.status(HttpStatus.CREATED).body(statusResponse);
         return new ResponseEntity<>(statusResponse, HttpStatus.CREATED);
     }
 
