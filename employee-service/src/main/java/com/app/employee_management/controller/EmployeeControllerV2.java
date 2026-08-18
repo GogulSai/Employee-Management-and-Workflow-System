@@ -7,6 +7,11 @@ import com.app.employee_management.helper.Create;
 import com.app.employee_management.helper.Update;
 import com.app.employee_management.values.DefaultValue;
 import com.app.employee_management.service.EmployeeServiceV2;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +33,25 @@ import java.util.List;
 @RequiredArgsConstructor //For Auto dependency injection
 @Slf4j //For logger
 @Validated //Required if we use validations annotation in this class
+@Tag(
+name = "Employee APIs",
+description = "Operations related to Employee Management"
+        )
 public class EmployeeControllerV2 {
 
     private final EmployeeServiceV2 employeeServiceV2; //Make it private final for auto constructor injection
 
 
     @PostMapping
+    @Operation(
+    summary = "Create Employee",
+    description = "Creates a new employee record"
+            )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Employee Created Successfully"),
+            @ApiResponse(responseCode = "400", description = "Validation Failed"),
+            @ApiResponse(responseCode = "409", description = "Duplicate Employee")
+    })
     public ResponseEntity<EmployeeStatusResponse<EmployeeResponseDTO>> employees(@RequestBody  @Validated(Create.class)  EmployeeRequestDTO employeeReq) throws Exception {
 
         EmployeeResponseDTO response = employeeServiceV2.employees(employeeReq);
@@ -55,8 +73,17 @@ public class EmployeeControllerV2 {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<EmployeeStatusResponse<EmployeeResponseDTO>> employeesPageable(@RequestParam(name = "page", defaultValue = "0"/*, required = false*/) @Min(0) int page,
-                                                                                         @RequestParam(name = "size", defaultValue = "10") @Min(1)int size) throws Exception {
+    public ResponseEntity<EmployeeStatusResponse<EmployeeResponseDTO>> employeesPageable(
+
+            @Parameter(description = "Page Number", example = "0")
+            @RequestParam(name = "page", defaultValue = "0")
+            @Min(0)
+            int page,
+
+            @Parameter(description = "Page Size", example = "10")
+            @RequestParam(name = "size", defaultValue = "10")
+            @Min(1)
+            int size) throws Exception {
         Pageable pageable = PageRequest.of(page, size);
 
 
