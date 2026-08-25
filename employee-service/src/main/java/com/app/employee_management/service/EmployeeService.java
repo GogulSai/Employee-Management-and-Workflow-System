@@ -19,12 +19,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeService {
     private final EmployeeDao employeeDao;
+    private static final AtomicLong EMP_CODE_SEQUENCE = new AtomicLong(1000);
 
     @Transactional
     public EmployeeResponseDTO employees(EmployeeRequestDTO employeeReq) {
@@ -34,6 +36,7 @@ public class EmployeeService {
         }
 
         Employee employee = EmployeeMapper.toEntity(employeeReq);
+        employee.setEmployeeCode(generateEmployeeCode());
         Employee savedEmployee = employeeDao.save(employee);
 
         return EmployeeMapper.toResponse(savedEmployee);
@@ -43,6 +46,7 @@ public class EmployeeService {
     public List<EmployeeResponseDTO> employeesBulk(List<EmployeeRequestDTO> lstEmployeeReq) {
 
         List<Employee> employeeSave = EmployeeMapper.toEntityBulk(lstEmployeeReq);
+        employeeSave.forEach(emp -> emp.setEmployeeCode(generateEmployeeCode()));
 
         Set<String> lstOfEmails = employeeSave.stream().map(Employee::getEmail).collect(Collectors.toSet());
 
@@ -67,5 +71,9 @@ public class EmployeeService {
         List<Employee> savedEmployee = employeeDao.saveAll(finalEmployeeSave);
 
         return EmployeeMapper.toResponseBulk(savedEmployee);
+    }
+
+    private String generateEmployeeCode() {
+        return "EMP-" + EMP_CODE_SEQUENCE.incrementAndGet();
     }
 }

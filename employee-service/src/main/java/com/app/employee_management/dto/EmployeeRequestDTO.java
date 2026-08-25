@@ -36,8 +36,8 @@ public record EmployeeRequestDTO
 
                 @JsonInclude(JsonInclude.Include.NON_EMPTY)
                 @Pattern(
-                        regexp = "ACTIVE|INACTIVE|TERMINATED",
-                        message = "Role must be ACTIVE, INACTIVE or TERMINATED"
+                        regexp = "ACTIVE|INACTIVE|ON_LEAVE|RESIGNED|TERMINATED",
+                        message = "Status must be ACTIVE, INACTIVE, ON_LEAVE, RESIGNED or TERMINATED"
                 )
                 String status,
 

@@ -2,6 +2,7 @@ package com.app.employee_management.helper;
 
 import com.app.employee_management.dto.EmployeeRequestDTO;
 import com.app.employee_management.dto.EmployeeResponseDTO;
+import com.app.employee_management.helper.EmploymentType;
 import com.app.employee_management.model.Employee;
 import org.springframework.data.domain.Page;
 
@@ -21,9 +22,26 @@ public class EmployeeMapper {
 
     public static Employee toEntity(EmployeeRequestDTO requestDTO) {
 
-        return new Employee(null, requestDTO.name(), requestDTO.email(),
-                requestDTO.department(), requestDTO.role(), requestDTO.salary()
-                , EmployeeStatus.ACTIVE, requestDTO.dateOfJoin(), null, null, null);
+        return Employee.builder()
+                .id(null)
+                .employeeCode(null)
+                .firstName(requestDTO.name())
+                .lastName(null)
+                .name(requestDTO.name())
+                .email(requestDTO.email())
+                .department(requestDTO.department())
+                .role(requestDTO.role())
+                .salary(requestDTO.salary())
+                .phoneNumber(null)
+                .dateOfBirth(null)
+                .status(EmployeeStatus.ACTIVE)
+                .employmentType(EmploymentType.PERMANENT)
+                .dateOfJoin(requestDTO.dateOfJoin())
+                .managerId(null)
+                .workLocation(null)
+                .createdBy("system")
+                .updatedBy("system")
+                .build();
     }
 
     public static EmployeeResponseDTO toResponse(Employee employee) {
@@ -54,7 +72,7 @@ public class EmployeeMapper {
         return employees.stream()
                 .map(emp -> new EmployeeResponseDTO(
                         emp.getId(),
-                        emp.getName(),
+                        emp.getName() == null ? emp.getFirstName() : emp.getName(),
                         emp.getEmail(),
                         emp.getDepartment(),
                         emp.getRole(),
@@ -73,7 +91,7 @@ public class EmployeeMapper {
         return employees
                 .map(emp -> new EmployeeResponseDTO(
                         emp.getId(),
-                        emp.getName(),
+                        emp.getName() == null ? emp.getFirstName() : emp.getName(),
                         emp.getEmail(),
                         emp.getDepartment(),
                         emp.getRole(),
