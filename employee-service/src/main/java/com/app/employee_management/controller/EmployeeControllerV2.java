@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -52,7 +53,7 @@ public class EmployeeControllerV2 {
             @ApiResponse(responseCode = "400", description = "Validation Failed"),
             @ApiResponse(responseCode = "409", description = "Duplicate Employee")
     })
-    public ResponseEntity<EmployeeStatusResponse<EmployeeResponseDTO>> employees(@RequestBody  @Validated(Create.class)  EmployeeRequestDTO employeeReq) throws Exception {
+    public ResponseEntity<EmployeeStatusResponse<EmployeeResponseDTO>> employees(@RequestBody  @Validated({Default.class, Update.class})  EmployeeRequestDTO employeeReq) throws Exception {
 
         EmployeeResponseDTO response = employeeServiceV2.employees(employeeReq);
 
@@ -114,7 +115,7 @@ public class EmployeeControllerV2 {
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public EmployeeStatusResponse<EmployeeResponseDTO> employeeUpdate(@RequestBody  @Validated(Update.class)   EmployeeRequestDTO employeeReq) throws Exception {
+    public EmployeeStatusResponse<EmployeeResponseDTO> employeeUpdate(@RequestBody  @Validated({Default.class, Update.class})  EmployeeRequestDTO employeeReq) throws Exception {
 
         EmployeeResponseDTO response = employeeServiceV2.employeeUpdate(employeeReq);
 
